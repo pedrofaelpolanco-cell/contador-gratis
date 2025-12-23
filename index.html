@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuenta Regresiva Nixie</title>
+
+<style>
+:root {
+    --brillo: #ffb347;
+}
+
+body {
+    background: radial-gradient(circle, #111, #000);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Courier New', monospace;
+    margin: 0;
+}
+
+/* CAJA */
+.caja {
+    background: linear-gradient(145deg, #5a3a1a, #3b2412);
+    border: 8px solid #2a1608;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow:
+        inset 0 0 30px rgba(0,0,0,0.6),
+        0 15px 40px black;
+    animation: encendidoCaja 2s ease-out;
+    width: 95%;
+    max-width: 900px;
+}
+
+@keyframes encendidoCaja {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+h1 {
+    text-align: center;
+    color: var(--brillo);
+    text-shadow: 0 0 15px var(--brillo);
+    margin-bottom: 20px;
+    font-size: clamp(1.2em, 4vw, 2em);
+}
+
+/* PANEL */
+.panel {
+    display: flex;
+    gap: 25px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* GRUPOS */
+.grupo {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+}
+
+/* NIXIE */
+.nixie {
+    width: clamp(45px, 10vw, 70px);
+    height: clamp(90px, 18vw, 120px);
+    background: radial-gradient(circle, var(--brillo) 0%, #2a1200 70%);
+    border-radius: 50%;
+    box-shadow:
+        0 0 25px var(--brillo),
+        inset 0 0 20px rgba(255,200,120,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(1.8em, 5vw, 2.4em);
+    color: black;
+    text-shadow: 0 0 20px var(--brillo);
+    animation: encendido 1.5s ease-out, parpadeo 3s infinite;
+}
+
+/* ANIMACIONES */
+@keyframes encendido {
+    0% { opacity: 0; filter: brightness(0); }
+    60% { opacity: 1; filter: brightness(2); }
+    100% { filter: brightness(1); }
+}
+
+@keyframes parpadeo {
+    0%, 100% { opacity: 1; }
+    98% { opacity: 0.7; }
+}
+
+.etiqueta {
+    text-align: center;
+    margin-top: 6px;
+    color: var(--brillo);
+    font-size: clamp(0.7em, 3vw, 0.9em);
+}
+
+/* 📱 MODO CELULAR */
+@media (max-width: 600px) {
+    .panel {
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .grupo {
+        justify-content: center;
+    }
+}
+</style>
+
+<!-- Google AdSense (se activa cuando tengas cuenta) -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+     data-ad-client="ca-pub-TU_ID_AQUI"
+     crossorigin="anonymous"></script>
+
+
+</head>
+
+<body>
+
+<div style="margin:20px; text-align:center;">
+  <!-- ANUNCIO SUPERIOR -->
+</div>
+
+
+<div class="caja">
+
+<h1>⏳ Cuenta Regresiva del Año</h1>
+
+<div class="panel">
+
+    <div>
+        <div class="grupo" id="dias"></div>
+        <div class="etiqueta">DÍAS</div>
+    </div>
+
+    <div>
+        <div class="grupo" id="horas"></div>
+        <div class="etiqueta">HORAS</div>
+    </div>
+
+    <div>
+        <div class="grupo" id="minutos"></div>
+        <div class="etiqueta">MINUTOS</div>
+    </div>
+
+    <div>
+        <div class="grupo" id="segundos"></div>
+        <div class="etiqueta">SEGUNDOS</div>
+    </div>
+
+</div>
+
+</div>
+
+<script>
+function crearDigitos(id, valor, digitos = 2) {
+    const cont = document.getElementById(id);
+    cont.innerHTML = "";
+    valor.toString().padStart(digitos, "0").split("").forEach(d => {
+        const div = document.createElement("div");
+        div.className = "nixie";
+        div.textContent = d;
+        cont.appendChild(div);
+    });
+}
+
+function actualizar() {
+    const ahora = new Date();
+    const fin = new Date(ahora.getFullYear(), 11, 31, 23, 59, 59);
+    const diff = fin - ahora;
+
+    const dias = Math.floor(diff / 86400000);
+    const horas = Math.floor(diff / 3600000) % 24;
+    const minutos = Math.floor(diff / 60000) % 60;
+    const segundos = Math.floor(diff / 1000) % 60;
+
+    crearDigitos("dias", dias, 3);
+    crearDigitos("horas", horas);
+    crearDigitos("minutos", minutos);
+    crearDigitos("segundos", segundos);
+}
+
+setInterval(actualizar, 1000);
+actualizar();
+</script>
+
+<div style="margin:20px; text-align:center;">
+  <!-- ANUNCIO INFERIOR -->
+</div>
+
+
+</body>
+</html>
